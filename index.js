@@ -4,7 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 //Middleware
 app.use(cors());
@@ -20,6 +20,7 @@ async function run() {
         await client.connect();
         const database = client.db('travelAlly');
         const servicesCollection = database.collection('services');
+        const bookingsCollection = database.collection('bookings');
 
         //GET Services API
         app.get('/services', async(req, res) => {
@@ -27,16 +28,30 @@ async function run() {
             const services = await cursor.toArray();
             res.send(services);
         })
+        
+        //GET Bookings API
+        app.get('/bookings', async(req, res) => {
+            const cursor = bookingsCollection.find({});
+            const bookings = await cursor.toArray();
+            res.send(bookings);
+        })
 
-        // //POST API
-        // app.post('/services', async (req, res) => {
-        //     const service = req.body;
-        //     console.log('hit the post api', service);
+        // POST API
+        app.post('/bookings', async (req, res) => {
+            const booking = req.body;
+            console.log('hit the post api', booking);
 
-        //     const result = await servicesCollection.insertOne(service);
-        //     console.log(result);
-        //     res.json(result)
+            const result = await bookingsCollection.insertOne(booking);
+            console.log(result);
+            res.json(result)
+        })
 
+        //DELETE API
+        // app.delete('/bookings/:id', async (req, res) => {
+        //     const id = req.params.id;
+        //     const query = { _id: ObjectId(id) };
+        //     const result = await bookingsCollection.deleteOne(query);
+        //     res.json(result);
         // })
     }
 
