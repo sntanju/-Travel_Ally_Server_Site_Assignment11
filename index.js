@@ -58,7 +58,7 @@ async function run() {
             res.json(result)
         })
 
-        // POST Mybooking API
+        // POST MyBooking API
         app.get("/mybookings/:email", async (req, res) => {
             const cursor = bookingsCollection.find({email: req.params.email});
             const bookings = await cursor.toArray();
