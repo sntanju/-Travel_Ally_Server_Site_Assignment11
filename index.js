@@ -58,6 +58,13 @@ async function run() {
             res.json(result)
         })
 
+        // POST Mybooking API
+        app.get("/mybookings/:email", async (req, res) => {
+            const cursor = bookingsCollection.find({email: req.params.email});
+            const bookings = await cursor.toArray();
+            res.send(bookings);
+          });
+
         //DELETE Booking API 
         app.delete('/bookings/:id', async (req, res) => {
             const id = req.params.id;
