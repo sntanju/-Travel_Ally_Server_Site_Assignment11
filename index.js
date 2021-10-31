@@ -3,6 +3,7 @@ const { MongoClient } = require('mongodb');
 const cors = require('cors');
 require('dotenv').config();
 const  ObjectID = require('mongodb').ObjectId;
+const axios = require('axios');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -50,7 +51,7 @@ async function run() {
         //DELETE API 
         app.delete('/bookings/:id', async (req, res) => {
             const id = req.params.id;
-            const query = { _id: ObjectId(id) };
+            const query = { _id: ObjectID(id) };
             const result = await bookingsCollection.deleteOne(query);
             res.json(result);
         })
