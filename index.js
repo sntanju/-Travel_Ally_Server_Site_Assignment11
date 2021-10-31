@@ -2,8 +2,7 @@ const express = require('express');
 const { MongoClient } = require('mongodb');
 const cors = require('cors');
 require('dotenv').config();
-const  ObjectID = require('mongodb').ObjectId;
-const axios = require('axios');
+const  ObjectId = require('mongodb').ObjectId;
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -30,15 +29,26 @@ async function run() {
             const services = await cursor.toArray();
             res.send(services);
         })
+
+        // POST Services API
+        app.post('/services', async (req, res) => {
+            const services = req.body;
+            console.log('hit the post api', services);
+
+            const result = await servicesCollection.insertOne(services);
+            console.log(result);
+            res.json(result)
+        })
+
         
-        //GET Bookings API
+        // GET Bookings API
         app.get('/bookings', async(req, res) => {
             const cursor = bookingsCollection.find({});
             const bookings = await cursor.toArray();
             res.send(bookings);
         })
 
-        // POST API
+        // POST Booking API
         app.post('/bookings', async (req, res) => {
             const booking = req.body;
             console.log('hit the post api', booking);
@@ -48,10 +58,10 @@ async function run() {
             res.json(result)
         })
 
-        //DELETE API 
+        //DELETE Booking API 
         app.delete('/bookings/:id', async (req, res) => {
             const id = req.params.id;
-            const query = { _id: ObjectID(id) };
+            const query = { _id: ObjectId(id) };
             const result = await bookingsCollection.deleteOne(query);
             res.json(result);
         })
